@@ -7,8 +7,8 @@
         </div>
     @endif
 
-    <button wire:click="openModal" class="mb-4 px-4 py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
-        + Tambah Siswa
+    <button wire:click="openModal" class="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        Tambah Siswa
     </button>
 
     <table class="table-auto w-full border text-sm">

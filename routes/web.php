@@ -1,5 +1,4 @@
 <?php
-
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -26,11 +25,11 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:super_admin'])->group(function () {
     Route::get('/siswa', DashboardStudentManager::class)->name('siswa.index');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:super_admin'])->group(function () {
     Route::get('/gurupembimbing', DashboardMentorManager::class)->name('guru.index');
 });
 

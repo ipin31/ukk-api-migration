@@ -19,20 +19,22 @@
                         wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:navlist.item>
-                    <flux:navlist.item 
-                        icon="user-group" 
+                    @unless(auth()->user()->hasAnyRole(['Student']))
+                    <flux:navlist.item icon="user-group" 
                         :href="route('siswa.index')" 
                         :current="request()->routeIs('siswa.*')"
                         wire:navigate>
                         {{ __('Siswa') }}
                     </flux:navlist.item>
-                    <flux:navlist.item 
-                        icon="user-group" 
-                        :href="route('guru.index')" 
-                        :current="request()->routeIs('guru.*')"
-                        wire:navigate>
-                        {{ __('Guru Pembimbing') }}
-                    </flux:navlist.item>
+                    @endunless
+                    @unless(auth()->user()->hasAnyRole(['Student', 'Teacher']))
+                        <flux:navlist.item icon="user-group" 
+                            :href="route('guru.index')" 
+                            :current="request()->routeIs('guru.*')"
+                            wire:navigate>
+                            {{ __('Guru Pembimbing') }}
+                        </flux:navlist.item>
+                    @endunless
                     <flux:navlist.item 
                         icon="user-group" 
                         :href="route('pkl.index')" 

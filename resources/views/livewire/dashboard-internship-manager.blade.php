@@ -7,9 +7,11 @@
         </div>
     @endif
 
-    <button wire:click="openModal" class="mb-4 px-4 py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
-        + Tambah PKL
-    </button>
+    @if (!auth()->user()->hasRole('student') || !$this->userHasInternship)
+        <button wire:click="openModal" class="mb-4 px-4 py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
+            + Tambah PKL
+        </button>
+    @endif
 
     <table class="table-auto w-full border text-sm">
         <thead class="bg-gray-100">
@@ -27,10 +29,12 @@
                     <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($internship->mulai)->format('d-m-Y') }}</td>
                     <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($internship->selesai)->format('d-m-Y') }}</td>
                     <td class="px-4 py-2 border">
-                        <button wire:click="openModal({{ $internship->id }})" class="px-4 py-2 bg-yellow-400 text-blue-500 rounded hover:bg-yellow-500">
+                        <button wire:click="openModal({{ $internship->id }})"
+                            class="px-4 py-2 bg-yellow-400 text-blue-500 rounded hover:bg-yellow-500">
                             Edit
                         </button>
-                        <button wire:click="delete({{ $internship->id }})" class="px-4 py-2 bg-red-600 text-red-500  rounded hover:bg-red-700">
+                        <button wire:click="delete({{ $internship->id }})"
+                            class="px-4 py-2 bg-red-600 text-red-500  rounded hover:bg-red-700">
                             Hapus
                         </button>
                     </td>
@@ -49,17 +53,15 @@
             <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
                 <h3 class="text-lg font-semibold mb-4">{{ $internshipId ? 'Edit' : 'Tambah' }} Magang</h3>
 
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">Nama Siswa</label>
-                    <select wire:model="siswa_id" class="w-full border px-3 py-2 rounded">
-                        <option value="">Pilih Siswa</option>
-                        @foreach ($students as $student)
-                            <option value="{{ $student->id }}">{{ $student->nama }}</option>
-                        @endforeach
+                    <select wire:model="siswa_id" class="w-full border px-3 py-2 rounded" @if ($students->isEmpty()) disabled @endif>
+                        @if ($students->isNotEmpty())
+                            @foreach ($students as $student)
+                                <option value="{{ $student->id }}">{{ $student->nama }}</option>
+                            @endforeach
+                        @else
+                            <option value="">Tidak ada siswa terdaftar</option>
+                        @endif
                     </select>
-                    @error('siswa_id') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
                 <div class="mb-3">
                     <label class="block text-sm mb-1">Mulai</label>
                     <input type="date" wire:model="mulai" class="w-full border px-3 py-2 rounded" />

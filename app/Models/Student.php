@@ -18,6 +18,11 @@ class Student extends Model
           'status_pkl',
 
      ];
+
+     public function internship()
+     {
+          return $this->hasOne(Internship::class, 'siswa_id');
+     }
      
 
 }

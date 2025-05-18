@@ -14,6 +14,13 @@ class DashboardMentorManager extends Component
     public $mentorId, $nama, $gender = 'Laki-laki', $nip, $alamat, $kontak, $email;
     public $isOpen = false;
 
+    public function mount()
+    {
+        if (auth()->user()->hasRole('student')) {
+            abort(403, 'Kamu tidak diizinkan mengakses halaman ini.');
+        }
+    }
+
     protected $rules = [
         'nama' => 'required|string|max:255',
         'gender' => 'required|in:Laki-laki,Perempuan',

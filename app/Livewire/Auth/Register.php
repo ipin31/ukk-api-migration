@@ -36,9 +36,6 @@ class Register extends Component
 
         event(new Registered(($user = User::create($validated))));
 
-        // Memberikan role 'student' ke pengguna yang baru
-        $user->assignRole('student');
-
         // Memicu event 'Registered'
         event(new Registered($user));
 

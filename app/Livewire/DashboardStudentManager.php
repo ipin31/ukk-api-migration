@@ -15,6 +15,14 @@ class DashboardStudentManager extends Component
     public $isOpen = false;
     public $studentId;
 
+    public $users_id;
+
+    public function mount()
+    {
+        if (auth()->user()->hasRole('student')) {
+            abort(403, 'Kamu tidak diizinkan mengakses halaman ini.');
+        }
+    }
     protected $rules = [
         'nama' => 'required|string|max:255',
         'nis' => 'required|unique:siswa,nis', // Ganti 'students' menjadi 'siswa'
@@ -22,6 +30,7 @@ class DashboardStudentManager extends Component
         'alamat' => 'required|string|max:255',
         'kontak' => 'required|string|max:255',
         'email' => 'required|email|unique:siswa,email', // Ganti 'students' menjadi 'siswa'
+        'users_id' => 'required|exists:users,id',
     ];
 
     public function openModal()
@@ -47,6 +56,7 @@ class DashboardStudentManager extends Component
             'kontak' => $this->kontak,
             'email' => $this->email,
             'status_pkl' => $this->status_pkl ?? false,
+            'users_id' => auth()->id(),
         ]);
 
         session()->flash('success', 'Data siswa berhasil disimpan.');
