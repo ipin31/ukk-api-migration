@@ -16,8 +16,17 @@ class Student extends Model
           'kontak',
           'email',
           'status_pkl',
+          'foto',
 
      ];
+
+     public function getFotoUrlAttribute()
+     {
+          if (!empty($this->foto)) {
+               return asset('storage/' . $this->foto);
+          }
+          return null;
+     }
 
      public function internship()
      {

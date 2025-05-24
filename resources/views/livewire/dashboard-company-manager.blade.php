@@ -8,7 +8,7 @@
     @endif
 
     <button wire:click="openModal" class="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-        + Tambah Perusahaan
+        Tambah Perusahaan
     </button>
 
     <table class="table-auto w-full border text-sm">
@@ -33,8 +33,8 @@
                     <td class="px-4 py-2 border">{{ $company->email }}</td>
                     <td class="px-4 py-2 border">{{ $company->mentor->nama }}</td>
                     <td class="px-4 py-2 border">
-                        <button wire:click="openModal({{ $company->id }})" class="px-4 py-2 bg-blue-600 text-blue-500 rounded hover:bg-blue-700">Edit</button>
-                        <button wire:click="delete({{ $company->id }})" class="px-4 py-2 bg-red-600 text-red-500 rounded hover:bg-red-700">Hapus</button>
+                        <button wire:click="openModal({{ $company->id }})" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Edit</button>
+                        <button wire:click="delete({{ $company->id }})" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Hapus</button>
                     </td>
                 </tr>
             @endforeach

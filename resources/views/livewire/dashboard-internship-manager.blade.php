@@ -8,8 +8,8 @@
     @endif
 
     @if (!auth()->user()->hasRole('student') || !$this->userHasInternship)
-        <button wire:click="openModal" class="mb-4 px-4 py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
-            + Tambah PKL
+        <button wire:click="openModal" class="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Tambah PKL
         </button>
     @endif
 
@@ -30,11 +30,11 @@
                     <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($internship->selesai)->format('d-m-Y') }}</td>
                     <td class="px-4 py-2 border">
                         <button wire:click="openModal({{ $internship->id }})"
-                            class="px-4 py-2 bg-yellow-400 text-blue-500 rounded hover:bg-yellow-500">
+                            class="px-4 py-2 bg-yellow-400 text-white rounded hover:bg-yellow-500">
                             Edit
                         </button>
                         <button wire:click="delete({{ $internship->id }})"
-                            class="px-4 py-2 bg-red-600 text-red-500  rounded hover:bg-red-700">
+                            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
                             Hapus
                         </button>
                     </td>

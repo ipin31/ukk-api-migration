@@ -9,6 +9,7 @@ use App\Models\Student;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\FileUpload;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -31,12 +32,12 @@ class StudentResource extends Resource
                 Forms\Components\TextInput::make('nama')
                     ->required()
                     ->maxLength(255),
-               
+
                 Forms\Components\TextInput::make('nis')
                     ->label('NIS')
                     ->required()
                     ->maxLength(255)
-                    ->unique('siswa', 'nis', fn ($record) => $record)
+                    ->unique('siswa', 'nis', fn($record) => $record)
                     ->validationMessages([
                         'unique' => 'NIS sudah terdaftar, silakan masukkan NIS yang lain'
                     ]),
@@ -59,10 +60,17 @@ class StudentResource extends Resource
                     ->required()
                     ->email()
                     ->maxLength(255)
-                    ->unique('siswa', 'email', fn ($record) => $record)
+                    ->unique('siswa', 'email', fn($record) => $record)
                     ->validationMessages([
                         'unique' => 'Email sudah terdaftar, silakan masukkan Email yang lain'
                     ]),
+
+                FileUpload::make('foto')
+                    ->label('Foto Siswa')
+                    ->image()
+                    ->directory('images')    // sesuaikan folder penyimpanan di storage/app/public/images
+                    ->columnSpanFull()
+                    ->required(false)
 
             ]);
     }
@@ -71,6 +79,10 @@ class StudentResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('foto_url')
+                    ->label('Foto')
+                    ->size(50)
+                    ->circular(),
                 Tables\Columns\TextColumn::make('nama')->searchable(),
                 Tables\Columns\TextColumn::make('nis')->searchable(),
                 Tables\Columns\TextColumn::make('gender')->searchable(),

@@ -8,7 +8,7 @@
     @endif
 
     <button wire:click="openModal" class="mb-4 px-4 py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
-        + Tambah Guru Pembimbing
+        Tambah Guru Pembimbing
     </button>
 
     <table class="table-auto w-full border text-sm">

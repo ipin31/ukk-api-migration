@@ -31,11 +31,12 @@ class DashboardStudentManager extends Component
         'kontak' => 'required|string|max:255',
         'email' => 'required|email|unique:siswa,email', // Ganti 'students' menjadi 'siswa'
         'users_id' => 'required|exists:users,id',
+        'foto' => 'nullable|image|max:2048',
     ];
 
     public function openModal()
     {
-        $this->reset(['nama', 'nis', 'gender', 'alamat', 'kontak', 'email', 'status_pkl']);
+        $this->reset(['nama', 'nis', 'gender', 'alamat', 'kontak', 'email', 'status_pkl', 'foto']);
         $this->isOpen = true;
     }
 
@@ -57,6 +58,7 @@ class DashboardStudentManager extends Component
             'email' => $this->email,
             'status_pkl' => $this->status_pkl ?? false,
             'users_id' => auth()->id(),
+            'foto' => $this->foto ? $this->foto->store('photos', 'public') : null,
         ]);
 
         session()->flash('success', 'Data siswa berhasil disimpan.');
