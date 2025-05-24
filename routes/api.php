@@ -22,4 +22,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('industri', CompanyController::class);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
-
