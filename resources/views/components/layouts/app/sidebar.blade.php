@@ -35,20 +35,20 @@
                             {{ __('Guru Pembimbing') }}
                         </flux:navlist.item>
                     @endunless
-                    <flux:navlist.item 
+                    <!-- <flux:navlist.item 
                         icon="user-group" 
                         :href="route('pkl.index')" 
                         :current="request()->routeIs('pkl.*')"
                         wire:navigate>
                         {{ __('PKL') }}
-                    </flux:navlist.item>
-                    <flux:navlist.item 
+                    </flux:navlist.item> -->
+                    <!-- <flux:navlist.item 
                         icon="user-group" 
                         :href="route('industri.index')" 
                         :current="request()->routeIs('industri.*')"
                         wire:navigate>
                         {{ __('Industri') }}
-                    </flux:navlist.item>
+                    </flux:navlist.item> -->
                 </flux:navlist.group>
             </flux:navlist>
 

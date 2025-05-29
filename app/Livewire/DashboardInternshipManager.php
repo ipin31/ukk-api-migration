@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Internship;
 use App\Models\Student;
+use App\Models\Company;
 
 class DashboardInternshipManager extends Component
 {
@@ -15,11 +16,16 @@ class DashboardInternshipManager extends Component
     public $isOpen = false;
     public $internshipId;
 
+    public $industri_id;
+    public $company;
+    public $userHasInternship = false;
+
 
     protected $rules = [
         'mulai' => 'required|date',
         'selesai' => 'required|date|after:mulai',
         'siswa_id' => 'required|exists:siswa,id',
+        'industri_id' => 'required|exists:industri,id',
     ];
 
     public function mount()
@@ -31,8 +37,10 @@ class DashboardInternshipManager extends Component
             $this->userHasInternship = Internship::where('siswa_id', $siswa->id)->exists();
             $this->loadStudents($siswa);
         } else {
-            $this->students = collect(); // kosongkan jika siswa tidak ditemukan
+            $this->students = collect();
+            $this->userHasInternship = false;
         }
+        $this->company = Company::all();
     }
 
     public function loadStudents($siswa = null)
@@ -51,6 +59,7 @@ class DashboardInternshipManager extends Component
             $this->mulai = $internship->mulai;
             $this->selesai = $internship->selesai;
             $this->siswa_id = $internship->siswa_id;
+            $this->industri_id = $internship->industri_id;
         }
 
         $this->isOpen = true;
@@ -67,57 +76,56 @@ class DashboardInternshipManager extends Component
     {
         $this->validate();
 
-        // Ambil ulang data siswa untuk amankan manipulasi data
-        $siswa = Student::where('email', auth()->user()->email)->first();
+        $userEmail = auth()->user()->email;
+
+        $siswa = Student::where('email', $userEmail)->first();
         if (!$siswa) {
             session()->flash('error', 'Siswa tidak ditemukan.');
             return;
         }
 
-        $this->siswa_id = $siswa->id;
+        // Cegah jika user mencoba menambahkan data baru padahal sudah ada
+        if (!$this->internshipId) {
+            $sudahAda = Internship::whereHas('student', function ($query) use ($userEmail) {
+                $query->where('email', $userEmail);
+            })->exists();
 
-        // Cek jika student hanya boleh buat 1 data
-        if (!$this->internshipId && auth()->user()->hasRole('student')) {
-            $exists = Internship::where('siswa_id', $this->siswa_id)->exists();
-            if ($exists) {
-                session()->flash('error', 'Anda sudah pernah mengisi data PKL.');
+            if ($sudahAda) {
+                session()->flash('error', 'Anda sudah mengisi data PKL.');
                 return;
             }
         }
+
+        $data = [
+            'mulai' => $this->mulai,
+            'selesai' => $this->selesai,
+            'siswa_id' => $siswa->id,
+            'industri_id' => $this->industri_id,
+        ];
 
         if ($this->internshipId) {
             $internship = Internship::findOrFail($this->internshipId);
 
+            // Jika bukan pemilik data, tolak
             if (auth()->user()->hasRole('student') && $internship->siswa_id != $siswa->id) {
                 abort(403);
             }
 
-            $internship->update([
-                'mulai' => $this->mulai,
-                'selesai' => $this->selesai,
-                'siswa_id' => $this->siswa_id,
-            ]);
+            $internship->update($data);
         } else {
-            Internship::create([
-                'mulai' => $this->mulai,
-                'selesai' => $this->selesai,
-                'siswa_id' => $this->siswa_id,
-            ]);
+            Internship::create($data);
         }
 
-        if (!$this->internshipId && auth()->user()->hasRole('student')) {
-            if ($this->userHasInternship) {
-                session()->flash('error', 'Anda sudah pernah mengisi data PKL.');
-                return;
-            }
-        }
-
-        // $this->userHasInternship = Internship::where('siswa_id', $siswa->id)->exists();
         $this->userHasInternship = true;
 
-        session()->flash('success', 'Data magang berhasil disimpan.');
+        session()->flash('success_internship', 'Laporan PKL berhasil disimpan.');
         $this->closeModal();
+
+        return $this->redirect('/dashboard');
+
     }
+
+
 
     public function delete($id)
     {
@@ -146,16 +154,26 @@ class DashboardInternshipManager extends Component
 
     public function render()
     {
-        $query = Internship::query();
+        $user = auth()->user();
 
-        if (auth()->user()->hasRole('student') && auth()->user()->student) {
-            $query->where('siswa_id', auth()->user()->student->id);
+        // Ambil data siswa berdasarkan email user yang sedang login
+        $student = Student::where('email', $user->email)->first();
+
+        // Default kosong
+        $internships = collect();
+        $this->userHasInternship = false;
+
+        // Jika data siswa ditemukan, ambil PKL-nya
+        if ($student) {
+            $internships = Internship::where('siswa_id', $student->id)->get();
+            $this->userHasInternship = $internships->isNotEmpty();
         }
 
         return view('livewire.dashboard-internship-manager', [
-            'internships' => $query->latest()->paginate(10),
-            'students' => $this->students,
+            'internships' => $internships,
+            'students' => collect([$student])->filter(), // satu siswa saja
             'userHasInternship' => $this->userHasInternship,
         ]);
     }
+
 }

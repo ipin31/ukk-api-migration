@@ -28,7 +28,7 @@ class CompanyResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nama')
-                    ->label('Nama Perusahaan')
+                    ->label('Nama Industri')
                     ->required()
                     ->maxLength(255),
 
@@ -51,17 +51,7 @@ class CompanyResource extends Resource
 
                 Select::make('guru_id')
                     ->label('Guru Pembimbing')
-                    ->relationship('mentor', 'nama',) //mentor = nama model bukan nama field
-                    ->options(function ($record) {
-                        if ($record) {
-                            // Jika sedang edit, tampilkan semua mentor
-                            return Mentor::all()->pluck('nama', 'id');
-                        } else {
-                            // Jika sedang membuat data baru, hanya tampilkan mentor yang belum digunakan
-                            $usedGuruIds = Company::pluck('guru_id'); // Ganti YourModel dengan model yang sesuai
-                            return Mentor::whereNotIn('id', $usedGuruIds)->pluck('nama', 'id');
-                        }
-                    })
+                    ->relationship('guru', 'nama')
                     ->required(),
 
             ]);
@@ -71,12 +61,12 @@ class CompanyResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama')->label('Perusahaan')->searchable(),
+                Tables\Columns\TextColumn::make('nama')->label('Industri')->searchable(),
                 Tables\Columns\TextColumn::make('bidang_usaha')->searchable(),
                 Tables\Columns\TextColumn::make('alamat')->searchable(),
                 Tables\Columns\TextColumn::make('kontak')->searchable(),
                 Tables\Columns\TextColumn::make('email')->searchable(),
-                Tables\Columns\TextColumn::make('mentor.nama')->label('Guru Pembimbing')->searchable(),
+                Tables\Columns\TextColumn::make('guru.nama')->label('Guru Pembimbing')->searchable(),
             ])
             ->filters([
                 //

@@ -17,6 +17,7 @@ class Student extends Model
           'email',
           'status_pkl',
           'foto',
+          'users_id'
 
      ];
 

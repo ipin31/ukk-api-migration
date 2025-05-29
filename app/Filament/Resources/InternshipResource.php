@@ -12,6 +12,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -32,17 +33,20 @@ class InternshipResource extends Resource
                     ->relationship('student', 'nama') //student = nama model bukan nama field
                     ->required(),
 
+                Select::make('industri_id')
+                    ->label('Industri')
+                    ->relationship('industri', 'nama') // industri = nama relasi, nama = field dari tabel industri
+                    ->required(),
+
                 DatePicker::make('mulai')
                     ->required(),
 
                 DatePicker::make('selesai')
                     ->required()
-                    ->after('mulai')
+                    ->afterOrEqual(fn(callable $get) => Carbon::parse($get('mulai'))->addDays(90))
                     ->validationMessages([
-                        'after' => 'Tanggal selesai harus setelah tanggal mulai.'
-                    ])
-
-
+                        'after_or_equal' => 'Tanggal selesai harus minimal 90 hari setelah tanggal mulai.',
+                    ]),
             ]);
     }
 
@@ -51,8 +55,22 @@ class InternshipResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('student.nama')->label('Siswa')->searchable(),
+                Tables\Columns\TextColumn::make('industri.nama')->label('Industri')->searchable(),
+                Tables\Columns\TextColumn::make('industri.guru.nama')
+                    ->label('Guru Pembimbing')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('mulai')->searchable(),
                 Tables\Columns\TextColumn::make('selesai')->searchable(),
+                Tables\Columns\TextColumn::make('durasi_hari')
+                    ->label('Durasi')
+                    ->getStateUsing(function (Internship $record) {
+                        if ($record->mulai && $record->selesai) {
+                            $mulai = Carbon::parse($record->mulai);
+                            $selesai = Carbon::parse($record->selesai);
+                            $days = $mulai->diffInDays($selesai);
+                            return $days . ' hari';
+                        }
+                    }),
             ])
             ->filters([
                 //

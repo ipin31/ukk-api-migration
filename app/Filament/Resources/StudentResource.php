@@ -46,7 +46,8 @@ class StudentResource extends Resource
                     ->options([
                         'Laki-laki' => 'Laki-laki',
                         'Perempuan' => 'Perempuan',
-                    ]),
+                    ])
+                    ->required(),
 
                 Forms\Components\TextInput::make('alamat')
                     ->required()

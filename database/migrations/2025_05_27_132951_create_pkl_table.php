@@ -24,13 +24,6 @@ return new class extends Migration {
                 ->constrained('industri')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-
-            $table->foreignId('guru_id')
-                ->nullable();            
-
-            // Kalau guru_id juga perlu foreign key:
-            // $table->foreign('guru_id')->references('id')->on('guru')
-            //     ->onUpdate('cascade')->onDelete('set null');
         });
     }
 

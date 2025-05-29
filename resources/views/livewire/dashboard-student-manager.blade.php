@@ -1,105 +1,70 @@
-<div class="bg-white shadow p-4 rounded-lg">
-    <h2 class="text-lg font-bold mb-4">Manajemen Siswa</h2>
-
-    @if (session()->has('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <button wire:click="openModal" class="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-        Tambah Siswa
-    </button>
-
-    <table class="table-auto w-full border text-sm">
-        <thead class="bg-gray-100">
-            <tr>
-                <th class="px-4 py-2 border">Nama</th>
-                <th class="px-4 py-2 border">NIS</th>
-                <th class="px-4 py-2 border">Gender</th>
-                <th class="px-4 py-2 border">Alamat</th>
-                <th class="px-4 py-2 border">Kontak</th>
-                <th class="px-4 py-2 border">Email</th>
-                <th class="px-4 py-2 border">Status PKL</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($students as $student)
-                <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-2 border">{{ $student->nama }}</td>
-                    <td class="px-4 py-2 border">{{ $student->nis }}</td>
-                    <td class="px-4 py-2 border">{{ $student->gender }}</td>
-                    <td class="px-4 py-2 border">{{ $student->alamat }}</td>
-                    <td class="px-4 py-2 border">{{ $student->kontak }}</td>
-                    <td class="px-4 py-2 border">{{ $student->email }}</td>
-                    <td class="px-4 py-2 border">
-                        <span class="badge {{ $student->status_pkl ? 'bg-green-500' : 'bg-red-500' }}">
-                            {{ $student->status_pkl ? 'Sudah Lapor' : 'Belum Lapor' }}
-                        </span>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <div class="mt-4">
-        {{ $students->links() }}
-    </div>
-
-    {{-- Modal Form --}}
-    @if ($isOpen)
-        <div class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                <h3 class="text-lg font-semibold mb-4">Tambah Siswa Baru</h3>
-
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">Nama</label>
-                    <input type="text" wire:model="nama" class="w-full border px-3 py-2 rounded" />
-                    @error('nama') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">NIS</label>
-                    <input type="text" wire:model="nis" class="w-full border px-3 py-2 rounded" />
-                    @error('nis') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">Gender</label>
-                    <select wire:model="gender" class="w-full border px-3 py-2 rounded">
-                        <option value="Laki-laki">Laki-laki</option>
-                        <option value="Perempuan">Perempuan</option>
-                    </select>
-                    @error('gender') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">Alamat</label>
-                    <input type="text" wire:model="alamat" class="w-full border px-3 py-2 rounded" />
-                    @error('alamat') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">Kontak</label>
-                    <input type="text" wire:model="kontak" class="w-full border px-3 py-2 rounded" />
-                    @error('kontak') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">Email</label>
-                    <input type="email" wire:model="email" class="w-full border px-3 py-2 rounded" />
-                    @error('email') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="flex justify-end space-x-2">
-                    <button wire:click="closeModal" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
-                        Batal
-                    </button>
-                    <button wire:click="save" class="px-4 py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
-                        Simpan
-                    </button>
-                </div>
+@if($student)
+    <div class="flex flex-col md:flex-row gap-6 items-stretch">
+        <!-- Card Kiri: Foto dan Nama -->
+        <div
+            class="flex flex-col items-center gap-4 rounded-lg border border-gray-200 dark:border-gray-700 p-6 w-full md:w-1/3 h-full">
+            <img src="{{ $student->foto ? asset('storage/' . $student->foto) : asset('default-foto.png') }}"
+                alt="Foto Siswa" style="width: 160px; height: 160px; object-fit: cover; border-radius: 50%;" />
+            <div class="text-center">
+                <p class="text-sm text-gray-500 dark:text-gray-400">Nama</p>
+                <p class="text-lg font-semibold text-gray-800 dark:text-white">{{ $student->nama }}</p>
             </div>
         </div>
-    @endif
-</div>
+
+        <!-- Card Kanan: Semua data dibagi dua kolom dan isi memenuhi tinggi -->
+        <div
+            class="rounded-lg border border-gray-200 dark:border-gray-700 p-6 w-full md:w-2/3 h-full flex flex-col justify-between">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+                <!-- Kolom kiri -->
+                <div class="space-y-4 h-full flex flex-col justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Email</p>
+                        <p class="text-base font-medium text-gray-800 dark:text-white">{{ $student->email }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Gender</p>
+                        <p class="text-base font-medium text-gray-800 dark:text-white">{{ $student->gender }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">NIS</p>
+                        <p class="text-base font-medium text-gray-800 dark:text-white">{{ $student->nis }}</p>
+                    </div>
+
+                </div>
+
+                <!-- Kolom kanan -->
+                <div class="space-y-4 h-full flex flex-col justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Alamat</p>
+                        <p class="text-base font-medium text-gray-800 dark:text-white">{{ $student->alamat }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Kontak</p>
+                        <p class="text-base font-medium text-gray-800 dark:text-white">{{ $student->kontak }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Status PKL</p>
+                        <span class="inline-block px-3 py-1 text-sm font-semibold rounded-full 
+                            {{ $student->status_pkl ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                            {{ $student->status_pkl ? 'Sudah Lapor' : 'Belum Lapor' }}
+                        </span>
+                    </div>
+            </div>
+        </div>
+    </div>
+@else
+    <!-- Jika data siswa tidak ditemukan -->
+    <div class="text-center w-full">
+        <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+            Halo, {{ auth()->user()->name }}!
+        </h1>
+        <p class="text-gray-700 dark:text-gray-300">Email kamu: {{ auth()->user()->email }}</p>
+        <p class="text-yellow-600 dark:text-yellow-400 mt-2">
+            Data siswa belum tersedia untuk akun ini.
+        </p>
+    </div>
+@endif

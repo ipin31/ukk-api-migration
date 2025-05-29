@@ -1,15 +1,17 @@
 <div class="bg-white shadow p-4 rounded-lg">
-    <h2 class="text-lg font-bold mb-4">Manajemen Perusahaan</h2>
+    <h2 class="text-lg font-bold mb-4 text-center">Industri</h2>
 
-    @if (session()->has('success'))
+    @if (session()->has('success_company'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4">
-            {{ session('success') }}
+            {{ session('success_company') }}
         </div>
     @endif
 
-    <button wire:click="openModal" class="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-        Tambah Perusahaan
-    </button>
+    <div class="mb-4 text-left">
+        <button wire:click="openModal" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Tambah Industri
+        </button>
+    </div>
 
     <table class="table-auto w-full border text-sm">
         <thead class="bg-gray-100">
@@ -20,7 +22,7 @@
                 <th class="px-4 py-2 border">Kontak</th>
                 <th class="px-4 py-2 border">Email</th>
                 <th class="px-4 py-2 border">Mentor</th>
-                <th class="px-4 py-2 border">Aksi</th>
+                <!-- <th class="px-4 py-2 border">Aksi</th> -->
             </tr>
         </thead>
         <tbody>
@@ -31,11 +33,11 @@
                     <td class="px-4 py-2 border">{{ $company->alamat }}</td>
                     <td class="px-4 py-2 border">{{ $company->kontak }}</td>
                     <td class="px-4 py-2 border">{{ $company->email }}</td>
-                    <td class="px-4 py-2 border">{{ $company->mentor->nama }}</td>
-                    <td class="px-4 py-2 border">
-                        <button wire:click="openModal({{ $company->id }})" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Edit</button>
-                        <button wire:click="delete({{ $company->id }})" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Hapus</button>
-                    </td>
+                    <td class="px-4 py-2 border">{{ $company->guru->nama }}</td>
+                    <!-- <td class="px-4 py-2 border">
+                            <button wire:click="openModal({{ $company->id }})" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Edit</button>
+                            <button wire:click="delete({{ $company->id }})" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Hapus</button>
+                        </td> -->
                 </tr>
             @endforeach
         </tbody>
@@ -52,7 +54,7 @@
                 <h3 class="text-lg font-semibold mb-4">Tambah/Edit Perusahaan</h3>
 
                 <div class="mb-3">
-                    <label class="block text-sm mb-1">Nama</label>
+                    <label class="block text-sm mb-1">Nama Industri</label>
                     <input type="text" wire:model="nama" class="w-full border px-3 py-2 rounded" />
                     @error('nama') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                 </div>
@@ -82,20 +84,21 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="block text-sm mb-1">Mentor</label>
-                    <select wire:model="mentor_id" class="w-full border px-3 py-2 rounded">
-                        @foreach ($mentors as $mentor)
+                    <label class="block text-sm mb-1">Guru Pembimbing</label>
+                    <select wire:model="guru_id" class="w-full border px-3 py-2 rounded">
+                        <option value="">Pilih Guru Pembimbing</option>
+                        @foreach ($guru as $mentor)
                             <option value="{{ $mentor->id }}">{{ $mentor->nama }}</option>
                         @endforeach
                     </select>
-                    @error('mentor_id') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                    @error('guru_id') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="flex justify-end space-x-2">
-                    <button wire:click="closeModal" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+                    <button wire:click="closeModal" class="px-4 py-2 bg-red-700 text-white rounded hover:bg-red-900">
                         Batal
                     </button>
-                    <button wire:click="save" class="px-4 py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
+                    <button wire:click="save" class="px-4 py-2 bg-green-500 text-black rounded hover:bg-green-600">
                         Simpan
                     </button>
                 </div>

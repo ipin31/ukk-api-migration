@@ -67,8 +67,10 @@ class DashboardStudentManager extends Component
 
     public function render()
     {
+        $student = auth()->user()->student;
+
         return view('livewire.dashboard-student-manager', [
-            'students' => Student::paginate(10),
+            'student' => $student, // kirim variabel student ke view
         ]);
     }
 }

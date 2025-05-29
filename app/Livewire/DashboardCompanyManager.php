@@ -11,7 +11,7 @@ class DashboardCompanyManager extends Component
 {
     use WithPagination;
 
-    public $nama, $bidang_usaha, $alamat, $kontak, $email, $mentor_id;
+    public $nama, $bidang_usaha, $alamat, $kontak, $email, $guru_id;
     public $isOpen = false;
     public $companyId;
 
@@ -22,13 +22,13 @@ class DashboardCompanyManager extends Component
         'alamat' => 'required|string|max:255',
         'kontak' => 'required|string|max:255',
         'email' => 'required|email|max:255',
-        'mentor_id' => 'required|exists:mentors,id', // Validasi untuk mentor
+        'guru_id' => 'required|exists:guru,id', // Validasi untuk guru
     ];
 
     // Menampilkan modal untuk tambah atau edit
     public function openModal($companyId = null)
     {
-        $this->reset(['nama', 'bidang_usaha', 'alamat', 'kontak', 'email', 'mentor_id']);
+        $this->reset(['nama', 'bidang_usaha', 'alamat', 'kontak', 'email', 'guru_id']);
         
         if ($companyId) {
             $company = Company::find($companyId);
@@ -38,7 +38,7 @@ class DashboardCompanyManager extends Component
             $this->alamat = $company->alamat;
             $this->kontak = $company->kontak;
             $this->email = $company->email;
-            $this->mentor_id = $company->mentor_id;
+            $this->guru_id = $company->guru_id;
         }
         
         $this->isOpen = true;
@@ -47,7 +47,7 @@ class DashboardCompanyManager extends Component
     // Menutup modal
     public function closeModal()
     {
-        $this->reset(['nama', 'bidang_usaha', 'alamat', 'kontak', 'email', 'mentor_id']);
+        $this->reset(['nama', 'bidang_usaha', 'alamat', 'kontak', 'email', 'guru_id']);
         $this->isOpen = false;
     }
 
@@ -64,7 +64,7 @@ class DashboardCompanyManager extends Component
                 'alamat' => $this->alamat,
                 'kontak' => $this->kontak,
                 'email' => $this->email,
-                'mentor_id' => $this->mentor_id,
+                'guru_id' => $this->guru_id,
             ]);
         } else {
             Company::create([
@@ -73,12 +73,13 @@ class DashboardCompanyManager extends Component
                 'alamat' => $this->alamat,
                 'kontak' => $this->kontak,
                 'email' => $this->email,
-                'mentor_id' => $this->mentor_id,
+                'guru_id' => $this->guru_id,
             ]);
         }
 
-        session()->flash('success', 'Data perusahaan berhasil disimpan.');
+        session()->flash('success_company', 'Data perusahaan berhasil disimpan.');
         $this->closeModal();
+        return $this->redirect('/dashboard');
     }
 
     // Menghapus data perusahaan
@@ -94,11 +95,11 @@ class DashboardCompanyManager extends Component
     public function render()
     {
         $companies = Company::paginate(10);  // Mendapatkan data perusahaan dengan pagination
-        $mentors = Mentor::all();  // Mendapatkan data mentor untuk dropdown
+        $guru = Mentor::all();  // Mendapatkan data guru untuk dropdown
 
         return view('livewire.dashboard-company-manager', [
             'companies' => $companies,
-            'mentors' => $mentors,
+            'guru' => $guru,
         ]);
     }
 }

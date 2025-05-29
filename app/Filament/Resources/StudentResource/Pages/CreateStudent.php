@@ -10,10 +10,15 @@ class CreateStudent extends CreateRecord
 {
     protected static string $resource = StudentResource::class;
 
-        protected function mutateFormDataBeforeCreate(array $data): array
+    protected function mutateFormDataBeforeCreate(array $data): array
     {
-        // Set users_id otomatis sebelum simpan
-        $data['users_id'] = auth()->id();
+        $user = \App\Models\User::where('email', $data['email'])->first();
+
+        if ($user) {
+            $data['users_id'] = $user->id;
+        } else {
+            $data['users_id'] = auth()->id();
+        }
 
         return $data;
     }
