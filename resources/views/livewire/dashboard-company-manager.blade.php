@@ -2,7 +2,7 @@
     <h2 class="text-lg font-bold mb-4 text-center">Industri</h2>
 
     @if (session()->has('success_company'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4">
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4 text-left">
             {{ session('success_company') }}
         </div>
     @endif
