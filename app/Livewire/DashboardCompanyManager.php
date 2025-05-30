@@ -77,7 +77,7 @@ class DashboardCompanyManager extends Component
             ]);
         }
 
-        session()->flash('success_company', 'Data perusahaan berhasil disimpan.');
+        session()->flash('success_company', 'Data industri berhasil disimpan.');
         $this->closeModal();
         return $this->redirect('/dashboard');
     }
@@ -88,7 +88,7 @@ class DashboardCompanyManager extends Component
         $company = Company::find($id);
         if ($company) {
             $company->delete();
-            session()->flash('success', 'Data perusahaan berhasil dihapus.');
+            session()->flash('success', 'Data industri berhasil dihapus.');
         }
     }
 

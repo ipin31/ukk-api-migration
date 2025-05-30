@@ -6,6 +6,7 @@ use App\Filament\Resources\StudentResource\Pages;
 use App\Filament\Resources\StudentResource\RelationManagers;
 use Filament\Tables\Columns\TextColumn;
 use App\Models\Student;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Select;
@@ -29,9 +30,23 @@ class StudentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama')
+                Select::make('users_id')
+                    ->label('Nama Siswa')
+                    ->relationship('users', 'name')
+                    ->preload()
+                    ->searchable()
                     ->required()
-                    ->maxLength(255),
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        // Ambil user berdasarkan ID
+                        $user = User::find($state);
+                        if ($user) {
+                            $set('nama', $user->name); // Isi field 'nama' otomatis
+                        }
+                    }),
+
+                Forms\Components\TextInput::make('nama')
+                    ->hidden() // disembunyikan dari user
+                    ->required(), // tetap wajib diisi karena ada di database
 
                 Forms\Components\TextInput::make('nis')
                     ->label('NIS')

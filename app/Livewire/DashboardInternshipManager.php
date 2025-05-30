@@ -7,6 +7,7 @@ use Livewire\WithPagination;
 use App\Models\Internship;
 use App\Models\Student;
 use App\Models\Company;
+use Carbon\Carbon;
 
 class DashboardInternshipManager extends Component
 {
@@ -20,7 +21,6 @@ class DashboardInternshipManager extends Component
     public $company;
     public $userHasInternship = false;
 
-
     protected $rules = [
         'mulai' => 'required|date',
         'selesai' => 'required|date|after:mulai',
@@ -28,6 +28,12 @@ class DashboardInternshipManager extends Component
         'industri_id' => 'required|exists:industri,id',
     ];
 
+    protected $messages = [
+        'mulai.required' => 'Tanggal mulai wajib diisi.',
+        'selesai.required' => 'Tanggal selesai wajib diisi.',
+        'selesai.after' => 'Tanggal selesai harus setelah tanggal mulai.',
+        'industri_id.required' => 'Silahkan pilih industri.',
+    ];
     public function mount()
     {
         $siswa = Student::where('email', auth()->user()->email)->first();
@@ -50,7 +56,7 @@ class DashboardInternshipManager extends Component
 
     public function openModal($internshipId = null)
     {
-        $this->resetErrorBag(); // penting untuk validasi Livewire
+        $this->resetErrorBag();
         $this->reset(['mulai', 'selesai', 'internshipId']);
 
         if ($internshipId) {
@@ -84,6 +90,13 @@ class DashboardInternshipManager extends Component
             return;
         }
 
+        // Validasi durasi minimal 90 hari
+        $durasiHari = Carbon::parse($this->mulai)->diffInDays(Carbon::parse($this->selesai));
+        if ($durasiHari < 90) {
+            $this->addError('selesai', 'Durasi PKL minimal harus 90 hari.');
+            return;
+        }
+
         // Cegah jika user mencoba menambahkan data baru padahal sudah ada
         if (!$this->internshipId) {
             $sudahAda = Internship::whereHas('student', function ($query) use ($userEmail) {
@@ -106,7 +119,6 @@ class DashboardInternshipManager extends Component
         if ($this->internshipId) {
             $internship = Internship::findOrFail($this->internshipId);
 
-            // Jika bukan pemilik data, tolak
             if (auth()->user()->hasRole('student') && $internship->siswa_id != $siswa->id) {
                 abort(403);
             }
@@ -122,10 +134,7 @@ class DashboardInternshipManager extends Component
         $this->closeModal();
 
         return $this->redirect('/dashboard');
-
     }
-
-
 
     public function delete($id)
     {
@@ -155,25 +164,29 @@ class DashboardInternshipManager extends Component
     public function render()
     {
         $user = auth()->user();
-
-        // Ambil data siswa berdasarkan email user yang sedang login
         $student = Student::where('email', $user->email)->first();
 
-        // Default kosong
         $internships = collect();
         $this->userHasInternship = false;
 
-        // Jika data siswa ditemukan, ambil PKL-nya
         if ($student) {
-            $internships = Internship::where('siswa_id', $student->id)->get();
+            $internships = Internship::where('siswa_id', $student->id)
+                ->get()
+                ->map(function ($internship) {
+                    $mulai = Carbon::parse($internship->mulai);
+                    $selesai = Carbon::parse($internship->selesai);
+                    $durasi = $mulai->diffInDays($selesai);
+                    $internship->durasi_hari = $durasi;
+                    $internship->durasi_valid = $durasi >= 90;
+                    return $internship;
+                });
             $this->userHasInternship = $internships->isNotEmpty();
         }
 
         return view('livewire.dashboard-internship-manager', [
             'internships' => $internships,
-            'students' => collect([$student])->filter(), // satu siswa saja
+            'students' => collect([$student])->filter(),
             'userHasInternship' => $this->userHasInternship,
         ]);
     }
-
 }

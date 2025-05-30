@@ -1,5 +1,5 @@
-<div class="bg-white shadow p-4 rounded-lg text-center">
-    <h2 class="text-lg font-bold mb-4 text-center">Laporan PKL</h2>
+<div class="relative shadow p-4 rounded-lg text-center border border-gray-200 dark:border-gray-700">
+    <h2 class="text-xl font-bold mb-4 text-center">Laporan PKL</h2>
 
     @if (session()->has('success_internship'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4 text-left">
@@ -22,7 +22,7 @@
     </div>
 
     <table class="table-auto w-full border text-sm">
-        <thead class="bg-gray-100">
+        <thead class="relative">
             <tr>
                 <th class="px-4 py-2 border">Industri</th>
                 <th class="px-4 py-2 border">Guru Pembimbing</th>
@@ -35,27 +35,25 @@
         <tbody>
             @if ($userHasInternship)
                 @foreach ($internships as $internship)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-2 border">{{ $internship->industri->nama ?? '-' }}</td>
-                            <td class="px-4 py-2 border">{{ $internship->industri->guru->nama ?? '-' }}</td>
-                            <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($internship->mulai)->format('d-m-Y') }}</td>
-                            <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($internship->selesai)->format('d-m-Y') }}</td>
-                            <td class="px-4 py-2 border">
-                                @if ($internship->mulai && $internship->selesai)
-                                    {{ \Carbon\Carbon::parse($internship->mulai)->diffInDays(\Carbon\Carbon::parse($internship->selesai)) }} hari
+                    <tr class="hover:bg-white/10 dark:hover:bg-white/5 transition duration-200">
+                        <td class="px-4 py-2 border">{{ $internship->industri->nama ?? '-' }}</td>
+                        <td class="px-4 py-2 border">{{ $internship->industri->guru->nama ?? '-' }}</td>
+                        <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($internship->mulai)->format('d-m-Y') }}</td>
+                        <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($internship->selesai)->format('d-m-Y') }}</td>
+                        <td class="px-4 py-2 border">
+                            @if ($internship->mulai && $internship->selesai)
+                                {{ $internship->durasi_hari }} hari
+                                @if (!$internship->durasi_valid)
                                 @endif
-                            </td>
-                            <td class="px-4 py-2 border">
-                                <button wire:click="openModal({{ $internship->id }})"
-                                    class="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500">
-                                    Edit
-                                </button>
-                                <!-- <button wire:click="delete({{ $internship->id }})"
-                                            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
-                                            Hapus
-                                        </button> -->
-                            </td>
-                        </tr>
+                            @endif
+                        </td>
+                        <td class="px-4 py-2 border">
+                            <button wire:click="openModal({{ $internship->id }})"
+                                class="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
                 @endforeach
             @else
                 <tr>
@@ -65,18 +63,17 @@
         </tbody>
     </table>
 
-
     {{-- Modal Form --}}
     @if ($isOpen)
         <div class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center text-start">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                <h3 class="text-lg font-semibold mb-4">{{ $internshipId ? 'Edit' : 'Tambah' }} Magang</h3>
+            <div class="bg-white dark:bg-white/10 backdrop-blur-none dark:backdrop-blur-lg p-6 rounded-lg shadow-lg w-full max-w-md text-black dark:text-white">
+                <h3 class="text-lg font-semibold mb-4 text-center">{{ $internshipId ? 'Edit' : 'Tambah' }} PKL </h3>
 
                 {{-- Pilih Siswa --}}
                 <div class="mb-3">
                     <label class="block text-sm mb-1">Siswa</label>
-                    <select wire:model="siswa_id" class="w-full border px-3 py-2 rounded" @if ($students->isEmpty())
-                    disabled @endif>
+                    <select wire:model="siswa_id" class="w-full border px-3 py-2 rounded bg-white dark:bg-neutral-800 text-black dark:text-white" 
+                        @if ($students->isEmpty()) disabled @endif>
                         @if ($students->isNotEmpty())
                             @foreach ($students as $student)
                                 <option value="{{ $student->id }}">{{ $student->nama }}</option>
@@ -88,14 +85,14 @@
                     @error('siswa_id') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                 </div>
 
-                {{-- Pilih Industri / Company --}}
+                {{-- Pilih Industri --}}
                 <div class="mb-3">
                     <label class="block text-sm mb-1">Industri</label>
-                    <select wire:model="industri_id" class="w-full border px-3 py-2 rounded">
-                        <option value="">Pilih Industri </option>
-                        @foreach ($company as $item)
-                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                        @endforeach
+                    <select wire:model="industri_id" class="w-full border px-3 py-2 rounded bg-white dark:bg-neutral-800 text-black dark:text-white">
+                        <option value="">Pilih Industri</option>
+                            @foreach ($company as $item)
+                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                            @endforeach
                     </select>
                     @error('industri_id') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                 </div>

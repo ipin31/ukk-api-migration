@@ -17,14 +17,11 @@
                 </div> -->
             </div>
 
-            <div
-                class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                    @livewire('DashboardInternshipManager')
-            </div>
-            
-            <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                @livewire('DashboardCompanyManager')
-            </div>
+            @if (auth()->user()->getRoleNames()->contains('Student') && \App\Models\Student::where('email', auth()->user()->email)->exists())
+                @livewire('dashboard-internship-manager')
+                @livewire('dashboard-company-manager')
+            @endif
+
         
         </div>
     </div>

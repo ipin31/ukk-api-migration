@@ -33,6 +33,11 @@ class Student extends Model
      {
           return $this->hasOne(Internship::class, 'siswa_id');
      }
+
+     public function users()
+     {
+          return $this->belongsTo(User::class, 'users_id');
+     }
      
 
 }

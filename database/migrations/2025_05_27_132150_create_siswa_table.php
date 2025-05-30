@@ -19,6 +19,10 @@ return new class extends Migration {
             $table->string('foto', 255)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->foreignId('users_id')
+                ->constrained('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
