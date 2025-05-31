@@ -19,9 +19,11 @@ class DashboardStudentManager extends Component
 
     public function mount()
     {
-        if (auth()->user()->hasRole('student')) {
+        // Jika user punya role dan bukan salah satu dari yang diizinkan, tolak akses
+        if (auth()->user()->getRoleNames()->isNotEmpty() && !auth()->user()->hasAnyRole(['Student', 'Teacher', 'super_admin'])) {
             abort(403, 'Kamu tidak diizinkan mengakses halaman ini.');
         }
+        // Jika user tidak punya role sama sekali (kosong), tetap bisa akses
     }
     protected $rules = [
         'nama' => 'required|string|max:255',

@@ -57,7 +57,7 @@
                 @endforeach
             @else
                 <tr>
-                    <td colspan="6" class="text-center text-gray-500 py-4">Belum Lapor PKL</td>
+                    <td colspan="6" class="relative py-4 text-center text-gray-500 dark:text-white">Belum Lapor PKL</td>
                 </tr>
             @endif
         </tbody>

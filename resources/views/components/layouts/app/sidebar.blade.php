@@ -13,42 +13,51 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Menu')" class="grid">
-                    <flux:navlist.item icon="home" 
+                    {{-- Menu Dashboard untuk semua user --}}
+                    <flux:navlist.item 
+                        icon="home" 
                         :href="route('dashboard')" 
-                        :current="request()->routeIs('dashboard')" 
+                        :current="request()->routeIs('dashboard')"
                         wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:navlist.item>
-                    <!-- @unless(auth()->user()->hasAnyRole(['Student']))
-                    <flux:navlist.item icon="user-group" 
-                        :href="route('siswa.index')" 
-                        :current="request()->routeIs('siswa.*')"
-                        wire:navigate>
-                        {{ __('Siswa') }}
-                    </flux:navlist.item>
-                    @endunless
-                    @unless(auth()->user()->hasAnyRole(['Student', 'Teacher']))
-                        <flux:navlist.item icon="user-group" 
-                            :href="route('guru.index')" 
-                            :current="request()->routeIs('guru.*')"
-                            wire:navigate>
-                            {{ __('Guru Pembimbing') }}
-                        </flux:navlist.item>
-                    @endunless -->
-                    <!-- <flux:navlist.item 
-                        icon="user-group" 
-                        :href="route('pkl.index')" 
-                        :current="request()->routeIs('pkl.*')"
-                        wire:navigate>
-                        {{ __('PKL') }}
-                    </flux:navlist.item> -->
-                    <!-- <flux:navlist.item 
-                        icon="user-group" 
-                        :href="route('industri.index')" 
-                        :current="request()->routeIs('industri.*')"
-                        wire:navigate>
-                        {{ __('Industri') }}
-                    </flux:navlist.item> -->
+                
+                    {{-- Menu tambahan hanya untuk user yang punya role --}}
+                    @if(auth()->user()->getRoleNames()->count() > 0)
+                        @unless(auth()->user()->hasRole('Student'))
+                            <flux:navlist.item 
+                                icon="user-group" 
+                                :href="route('guru.index')" 
+                                :current="request()->routeIs('guru.index')"
+                                wire:navigate>
+                                {{ __('Guru Pembimbing') }}
+                            </flux:navlist.item>
+
+                            <flux:navlist.item 
+                                icon="user-group" 
+                                :href="route('list.siswa')" 
+                                :current="request()->routeIs('list.siswa')"
+                                wire:navigate>
+                                {{ __('List Siswa') }}
+                            </flux:navlist.item>
+
+                            <flux:navlist.item 
+                                icon="user-group" 
+                                :href="route('laporan.pkl')" 
+                                :current="request()->routeIs('laporan.pkl')"
+                                wire:navigate>
+                                {{ __('Laporan PKL') }}
+                            </flux:navlist.item>
+
+                            <flux:navlist.item 
+                                icon="user-group" 
+                                :href="route('industri.index')" 
+                                :current="request()->routeIs('industri.index')"
+                                wire:navigate>
+                                {{ __('Industri') }}
+                            </flux:navlist.item>
+                        @endunless
+                    @endif
                 </flux:navlist.group>
             </flux:navlist>
 

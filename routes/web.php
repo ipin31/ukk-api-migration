@@ -4,8 +4,10 @@ use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\DashboardStudentManager;
+use App\Livewire\DashboardStudentList;
 use App\Livewire\DashboardMentorManager;
 use App\Livewire\DashboardInternshipManager;
+use App\Livewire\DashboardInternshipList;
 use App\Livewire\DashboardCompanyManager;
 
 Route::get('/', function () {
@@ -25,16 +27,24 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::middleware(['auth', 'role:super_admin'])->group(function () {
+Route::middleware(['auth', 'role:super_admin|Teacher'])->group(function () {
     Route::get('/siswa', DashboardStudentManager::class)->name('siswa.index');
 });
 
-Route::middleware(['auth', 'role:super_admin'])->group(function () {
+Route::middleware(['auth', 'role:super_admin|Teacher'])->group(function () {
+    Route::get('/listsiswa', DashboardStudentList::class)->name('list.siswa');
+});
+
+Route::middleware(['auth', 'role:super_admin|Teacher'])->group(function () {
     Route::get('/gurupembimbing', DashboardMentorManager::class)->name('guru.index');
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/pkl', DashboardInternshipManager::class)->name('pkl.index');
+});
+
+Route::middleware(['auth', 'role:super_admin|Teacher'])->group(function () {
+    Route::get('/laporanpkl', DashboardInternshipList::class)->name('laporan.pkl');
 });
 
 Route::middleware(['auth'])->group(function () {

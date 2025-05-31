@@ -16,7 +16,7 @@ class DashboardMentorManager extends Component
 
     public function mount()
     {
-        if (auth()->user()->hasRole('student')) {
+        if (auth()->user()->hasAnyRole('student')) {
             abort(403, 'Kamu tidak diizinkan mengakses halaman ini.');
         }
     }

@@ -1,5 +1,5 @@
-<div class="bg-white shadow p-4 rounded-lg">
-    <h2 class="text-lg font-bold mb-4">Manajemen Guru Pembimbing</h2>
+<div class="relative shadow p-4 rounded-lg text-center border border-gray-200 dark:border-gray-700">
+    <h2 class="text-xl font-bold mb-4 text-center text-gray-800 dark:text-white">Guru Pembimbing</h2>
 
     @if (session()->has('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4">
@@ -7,12 +7,12 @@
         </div>
     @endif
 
-    <button wire:click="openModal" class="mb-4 px-4 py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
+    <!-- <button wire:click="openModal" class="mb-4 px-4 py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
         Tambah Guru Pembimbing
-    </button>
+    </button> -->
 
     <table class="table-auto w-full border text-sm">
-        <thead class="bg-gray-100">
+        <thead class="relative">
             <tr>
                 <th class="px-4 py-2 border">Nama</th>
                 <th class="px-4 py-2 border">NIP</th>
@@ -22,9 +22,9 @@
                 <th class="px-4 py-2 border">Email</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-gray-800 dark:text-white">
             @foreach ($mentors as $mentor)
-                <tr class="hover:bg-gray-50">
+                <tr class="hover:bg-white/10 dark:hover:bg-white/5 transition duration-200">
                     <td class="px-4 py-2 border">{{ $mentor->nama }}</td>
                     <td class="px-4 py-2 border">{{ $mentor->nip }}</td>
                     <td class="px-4 py-2 border">{{ $mentor->gender }}</td>
@@ -36,65 +36,9 @@
         </tbody>
     </table>
 
-    <div class="mt-4">
+    <div class="relative mt-4">
         {{ $mentors->links() }}
     </div>
 
-    {{-- Modal Form --}}
-    @if ($isOpen)
-        <div class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                <h3 class="text-lg font-semibold mb-4">Tambah Guru Baru</h3>
-
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">Nama</label>
-                    <input type="text" wire:model="nama" class="w-full border px-3 py-2 rounded" />
-                    @error('nama') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">Gender</label>
-                    <select wire:model="gender" class="w-full border px-3 py-2 rounded">
-                        <option value="Laki-laki">Laki-laki</option>
-                        <option value="Perempuan">Perempuan</option>
-                    </select>
-                    @error('gender') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">NIP</label>
-                    <input type="text" wire:model="nip" class="w-full border px-3 py-2 rounded" />
-                    @error('nip') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">Alamat</label>
-                    <input type="text" wire:model="alamat" class="w-full border px-3 py-2 rounded" />
-                    @error('alamat') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">Kontak</label>
-                    <input type="text" wire:model="kontak" class="w-full border px-3 py-2 rounded" />
-                    @error('kontak') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label class="block text-sm mb-1">Email</label>
-                    <input type="email" wire:model="email" class="w-full border px-3 py-2 rounded" />
-                    @error('email') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="flex justify-end space-x-2">
-                    <button wire:click="closeModal" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
-                        Batal
-                    </button>
-                    <button wire:click="save" class="px-4 py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
-                        Simpan
-                    </button>
-                </div>
-            </div>
-        </div>
-    @endif
 </div>
 
