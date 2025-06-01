@@ -1,62 +1,68 @@
-<div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+<div class="wrapper">
+    <div class="form_container">
 
-    <!-- Session Status -->
-    <x-auth-session-status class="text-center" :status="session('status')" />
+        <!-- CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
 
-    <form wire:submit="register" class="flex flex-col gap-6">
-        <!-- Name -->
-        <flux:input
-            wire:model="name"
-            :label="__('Name')"
-            type="text"
-            required
-            autofocus
-            autocomplete="name"
-            :placeholder="__('Full name')"
-        />
+        {{-- REGISTER FORM --}}
+        <div class="form_box register">
+            <h2>Register</h2>
+            <form wire:submit.prevent="register">
+                <div class="input_box">
+                    <input type="text" placeholder="Username" wire:model="name" required>
+                    <i class="fas fa-user"></i>
+                </div>
+                @error('name')
+                    <small class="text-red-500">{{ $message }}</small>
+                @enderror
 
-        <!-- Email Address -->
-        <flux:input
-            wire:model="email"
-            :label="__('Email address')"
-            type="email"
-            required
-            autocomplete="email"
-            placeholder="email@example.com"
-        />
+                <div class="input_box">
+                    <input type="email" placeholder="Email" wire:model="email" required>
+                    <i class="fas fa-envelope"></i>
+                </div>
+                @error('email')
+                    <small class="text-red-500">{{ $message }}</small>
+                @enderror
 
-        <!-- Password -->
-        <flux:input
-            wire:model="password"
-            :label="__('Password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            :placeholder="__('Password')"
-            viewable
-        />
+                <div class="input_box" style="position: relative;">
+                    <input type="password" placeholder="Password" id="registerPassword" wire:model="password" required
+                        style="padding-right: 40px;">
+                    <i class="fas fa-lock"></i>
+                    <i class="fas fa-eye togglePasswordBtn" data-target="registerPassword"
+                        style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                </div>
+                @error('password')
+                    <small class="text-red-500">{{ $message }}</small>
+                @enderror
 
-        <!-- Confirm Password -->
-        <flux:input
-            wire:model="password_confirmation"
-            :label="__('Confirm password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            :placeholder="__('Confirm password')"
-            viewable
-        />
+                <div class="input_box" style="position: relative;">
+                    <input type="password" placeholder="Confirm Password" id="registerConfirmPassword"
+                        wire:model="password_confirmation" required style="padding-right: 40px;">
+                    <i class="fas fa-lock"></i>
+                    <i class="fas fa-eye togglePasswordBtn" data-target="registerConfirmPassword"
+                        style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                </div>
 
-        <div class="flex items-center justify-end">
-            <flux:button type="submit" variant="primary" class="w-full">
-                {{ __('Create account') }}
-            </flux:button>
+                <button type="submit">Register</button>
+            </form>
         </div>
-    </form>
 
-    <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
-        {{ __('Already have an account?') }}
-        <flux:link :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
+        {{-- TOGGLE PANEL --}}
+        <div class="toggle_box">
+            <div class="toggle_panel toggle_right">
+                <a href="{{ route('home') }}" class="flex flex-col items-center font-medium" wire:navigate>
+                    <span class="flex h-auto w-auto items-center justify-center rounded-md mb-4">
+                        <x-app-logo-icon class="h-28 w-auto fill-current text-black dark:text-white" />
+                    </span>
+                    <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
+                </a>
+                <h2>Welcome Back!</h2>
+                <p>Already have an account?</p>
+                <a href="{{ route('login') }}" class="login_btn">Login</a>
+            </div>
+        </div>
+
     </div>
+    <script src="{{ asset('js/script.js') }}"></script>
 </div>

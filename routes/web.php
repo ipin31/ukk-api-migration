@@ -51,6 +51,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/industri', DashboardCompanyManager::class)->name('industri.index');
 });
 
-
-
 require __DIR__ . '/auth.php';

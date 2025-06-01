@@ -1,0 +1,368 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+button:focus,
+input:focus,
+textarea:focus {
+    outline: 0;
+}
+
+body {
+    background: linear-gradient(#005699, #004375);
+}
+
+.wrapper {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wrapper .form_container {
+    position: relative;
+    width: 850px;
+    height: 550px;
+    background: #ffffff;
+    border-radius: 30px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, .2);
+    overflow: hidden;
+}
+
+.wrapper .form_container.active .form_box {
+    right: 50%;
+}
+
+.wrapper .form_container.active .form_box.register {
+    visibility: visible;
+}
+
+.wrapper .form_container .form_box.register {
+    visibility: hidden;
+}
+
+.wrapper .form_container .form_box {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #333333;
+    text-align: center;
+    padding: 40px;
+    z-index: 1;
+    transition: .6s all ease-in-out;
+    right: 0;
+    top: 0;
+}
+
+.wrapper .form_container .form_box h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.wrapper .form_container .form_box .input_box {
+    position: relative;
+    width: 100%;
+}
+
+.wrapper .form_container .form_box .input_box input {
+    padding: 0 0 0 15px;
+    border: none;
+    font-size: 16px;
+    color: #333333;
+    font-weight: 500;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    width: 100%;
+    height: 45px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, rgb(75 108 183 / 15%) 0%, rgb(24 40 72 / 15%) 100%);
+    margin: 15px 0;
+}
+
+.wrapper .form_container .form_box .input_box i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.wrapper .form_container .form_box button {
+    width: 100%;
+    height: 45px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.wrapper .form_container .form_box .forgot_link a {
+    color: #000000;
+    text-decoration: none;
+    font-size: 15px;
+    margin: 15px 0;
+    display: block;
+}
+
+.wrapper .form_container .form_box p {
+    font-size: 15px;
+    margin: 15px 0;
+}
+
+.wrapper .form_container .form_box .social_icons a {
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 2px solid #cccccc;
+    text-decoration: none;
+    color: #000000;
+    font-size: 20px;
+    margin: 0 6px;
+    transition: 0.4s all ease-in-out;
+}
+
+.wrapper .form_container .form_box .social_icons a:hover {
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+    color: #ffffff;
+    border: transparent;
+}
+
+.wrapper .toggle_box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+}
+
+.wrapper .toggle_box::before {
+    content: "";
+    position: absolute;
+    left: -250%;
+    width: 300%;
+    height: 100%;
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+    border-radius: 150px;
+    z-index: 2;
+    transition: 1.8s ease-in-out;
+}
+
+.wrapper .form_container.active .toggle_box::before {
+    left: 50%;
+}
+
+.wrapper .form_container.active .toggle_box .toggle_panel.toggle_left {
+    left: -50%;
+    transition-delay: .6s;
+}
+
+.wrapper .form_container.active .toggle_box .toggle_panel.toggle_right {
+    right: 0;
+    transition-delay: 1.2s;
+}
+
+.wrapper .toggle_box .toggle_panel {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    transition: 0.6s all ease-in-out;
+    padding: 30px;
+    transition-delay: 1.2s;
+}
+
+.wrapper .toggle_box .toggle_panel h2 {
+    font-size: 36px;
+}
+
+.wrapper .toggle_box .toggle_panel p {
+    font-size: 15px;
+    margin: 15px 0;
+}
+
+.wrapper .toggle_box .toggle_panel button {
+    height: 46px;
+    padding: 0 40px;
+    background: transparent;
+    border: 2px solid #ffffff;
+    box-shadow: none;
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: 600;
+    transition: 0.4s all ease-in-out;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.wrapper .toggle_box .toggle_panel button:hover {
+    opacity: 0.7;
+}
+
+.wrapper .toggle_box .toggle_panel.toggle_left {
+    left: 0;
+}
+
+.wrapper .toggle_box .toggle_panel.toggle_right {
+    right: -50%;
+}
+
+/* Override posisi icon dalam input_box */
+.wrapper .form_container .form_box .input_box {
+    position: relative;
+    width: 100%;
+}
+
+/* Input dengan padding kanan untuk beri ruang icon */
+.wrapper .form_container .form_box .input_box input {
+    padding-right: 50px;
+    /* beri ruang untuk 2 icon di kanan */
+}
+
+/* Icon kunci (lock) */
+.wrapper .form_container .form_box .input_box i.fa-lock {
+    position: absolute;
+    right: 40px;
+    /* agak ke kiri dari toggle */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #555;
+    font-size: 18px;
+    pointer-events: none;
+    /* supaya klik di input tidak terganggu */
+}
+
+/* Icon toggle password (mata) */
+.wrapper .form_container .form_box .input_box i#togglePassword {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #555;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.wrapper .form_container .form_box .input_box i#togglePassword:hover {
+    color: #182848;
+    /* warna lebih gelap saat hover */
+}
+
+.register_btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    border: 2px solid white;
+    background-color: transparent;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+}
+
+/* Hover effect */
+.register_btn:hover {
+    background-color: white;
+    color: black;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .register_btn {
+        color: white;
+        border-color: white;
+    }
+
+    .register_btn:hover {
+        background-color: white;
+        color: black;
+    }
+}
+
+/* Light mode support */
+@media (prefers-color-scheme: light) {
+    .register_btn {
+        color: black;
+        border-color: black;
+    }
+
+    .register_btn:hover {
+        background-color: black;
+        color: white;
+    }
+}
+
+.login_btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    border: 2px solid white;
+    background-color: transparent;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+}
+
+/* Hover effect */
+.login_btn:hover {
+    background-color: white;
+    color: black;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .login_btn {
+        color: white;
+        border-color: white;
+    }
+
+    .login_btn:hover {
+        background-color: white;
+        color: black;
+    }
+}
+
+/* Light mode support */
+@media (prefers-color-scheme: light) {
+    .login_btn {
+        color: black;
+        border-color: black;
+    }
+
+    .login_btn:hover {
+        background-color: black;
+        color: white;
+    }
+}

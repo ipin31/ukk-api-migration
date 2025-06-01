@@ -7,11 +7,13 @@
         </div>
     @endif
 
-    <div class="mb-4 text-left">
-        <button wire:click="openModal" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            Tambah Industri
-        </button>
-    </div>
+    @unless(auth()->user()->hasRole('Teacher'))
+        <div class="mb-4 text-left">
+            <button wire:click="openModal" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                Tambah Industri
+            </button>
+        </div>
+    @endunless
 
     <table class="table-auto w-full border text-sm">
         <thead class="relative">

@@ -25,6 +25,15 @@ class DashboardCompanyManager extends Component
         'guru_id' => 'required|exists:guru,id', // Validasi untuk guru
     ];
 
+    protected $messages = [
+        'nama.required' => 'Nama perusahaan wajib diisi.',
+        'bidang_usaha.required' => 'Bidang usaha wajib diisi.',
+        'alamat.required' => 'Alamat perusahaan wajib diisi.',
+        'kontak.required' => 'Kontak perusahaan wajib diisi.',
+        'email.required' => 'Email perusahaan wajib diisi.',
+        'guru_id.required' => 'Silahkan pilih guru pembimbing.',
+    ];
+
     // Menampilkan modal untuk tambah atau edit
     public function openModal($companyId = null)
     {
