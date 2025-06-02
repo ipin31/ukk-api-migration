@@ -30,7 +30,7 @@
                         style="padding-right: 40px;">
                     <i class="fas fa-lock"></i>
                     <i class="fas fa-eye togglePasswordBtn" data-target="registerPassword"
-                        style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                        ></i>
                 </div>
                 @error('password')
                     <small class="text-red-500">{{ $message }}</small>
@@ -41,7 +41,7 @@
                         wire:model="password_confirmation" required style="padding-right: 40px;">
                     <i class="fas fa-lock"></i>
                     <i class="fas fa-eye togglePasswordBtn" data-target="registerConfirmPassword"
-                        style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                        ></i>
                 </div>
 
                 <button type="submit">Register</button>

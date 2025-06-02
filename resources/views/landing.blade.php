@@ -1,5 +1,4 @@
-@extends('layouts.app') <!-- Gunakan layout dasar aplikasi -->
-
+@extends('layouts.app')
 @section('content')
     <!-- Hero Section -->
     <section class="hero bg-blue-600 text-white text-center py-16">

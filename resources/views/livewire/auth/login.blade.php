@@ -20,11 +20,9 @@
                 @enderror
 
                 <div class="input_box" style="position: relative;">
-                    <input type="password" placeholder="Password" wire:model="password" required id="loginPassword"
-                        style="padding-right: 30px;">
-                    <i class="fas fa-lock" style="position: absolute; right: 35px; top: 50%; transform: translateY(-50%);"></i>
-                    <i id="toggleLoginPassword" class="fas fa-eye togglePasswordBtn" data-target="loginPassword"
-                        style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                    <input type="password" placeholder="Password" wire:model="password" required id="loginPassword" style="padding-right: 30px;">
+                    <i class="fas fa-lock" ></i>
+                    <i id="toggleLoginPassword" class="fas fa-eye togglePasswordBtn" data-target="loginPassword"></i>
                 </div>
 
                 @error('password')

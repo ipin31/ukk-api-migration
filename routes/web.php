@@ -11,7 +11,7 @@ use App\Livewire\DashboardInternshipList;
 use App\Livewire\DashboardCompanyManager;
 
 Route::get('/', function () {
-    return view('landing');
+    return view('home');
 })->name('home');
 
 Route::view('dashboard', 'dashboard')

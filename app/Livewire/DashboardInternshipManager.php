@@ -97,7 +97,7 @@ class DashboardInternshipManager extends Component
             return;
         }
 
-        // Cegah jika user mencoba menambahkan data baru padahal sudah ada
+        // Validasi user sudah memiliki data
         if (!$this->internshipId) {
             $sudahAda = Internship::whereHas('student', function ($query) use ($userEmail) {
                 $query->where('email', $userEmail);
