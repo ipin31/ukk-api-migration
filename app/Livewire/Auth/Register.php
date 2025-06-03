@@ -3,10 +3,12 @@
 namespace App\Livewire\Auth;
 
 use App\Models\User;
+use App\Models\Student;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -14,33 +16,49 @@ use Livewire\Component;
 class Register extends Component
 {
     public string $name = '';
-
     public string $email = '';
-
     public string $password = '';
-
     public string $password_confirmation = '';
+    public bool $showRegisterForm = true;
 
-    /**
-     * Handle an incoming registration request.
-     */
-    public function register(): void
+    public function register()
     {
-        $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
-        ]);
+        $this->resetErrorBag();
 
-        $validated['password'] = Hash::make($validated['password']);
+        try {
+            $validated = $this->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::exists('siswa', 'email')->whereNull('users_id'),],
+                'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            ], [
+                'email.exists' => 'Email ini tidak terdaftar sebagai siswa.',
+                'email.unique' => 'Email ini sudah digunakan.',
+                'name.required' => 'Nama wajib diisi.',
+                'password.required' => 'Password wajib diisi.',
+                'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            ]);
 
-        event(new Registered(($user = User::create($validated))));
+            $validated['password'] = Hash::make($validated['password']);
+            $user = User::create($validated);
+            $user->assignRole('Student');
 
-        // Memicu event 'Registered'
-        event(new Registered($user));
+            // Update users_id di student
+            $student = Student::where('email', $user->email)
+                ->whereNull('users_id')
+                ->first();
 
-        Auth::login($user);
+            if ($student) {
+                $student->users_id = $user->id;
+                $student->save();
+            }
 
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+            event(new Registered($user));
+            Auth::login($user);
+
+            $this->redirect(route('dashboard'), navigate: true);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->showRegisterForm = true;
+            throw $e;
+        }
     }
 }

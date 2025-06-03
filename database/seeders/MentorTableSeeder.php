@@ -25,7 +25,7 @@ class MentorTableSeeder extends Seeder
         foreach ($teachers as $guru) {
             Mentor::create([
                 'nama' => $guru['nama'],
-                'nip' => $guru['nis'],
+                'nip' => $guru['nip'],
                 'gender' => $guru['gender'],
                 'alamat' => $guru['alamat'],
                 'kontak' => $guru['kontak'],

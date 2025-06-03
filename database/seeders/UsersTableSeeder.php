@@ -51,6 +51,12 @@ class UsersTableSeeder extends Seeder
             ['name' => 'Laurentius Daviano Maximus', 'email' => 'laurentiusdaviano@gmail.com'],
             ['name' => 'Marcellinus Christo Pradipta', 'email' => 'marcellinuschristo@gmail.com'],
             ['name' => 'Meidinna Tiara Pramudhita', 'email' => 'meidinnatiara@gmail.com'],
+            ['name' => 'Margaretha Endah Titisari, S.T', 'email' => 'margarethaendah@gmail.com'],
+            ['name' => 'Rr. Retna Trimantaraningsih, S.T', 'email' => 'retrnatrimantaraningsih@gmail.com'],
+            ['name' => 'Sugiarto, S.T', 'email' => 'sugiarto@gmail.com'],
+            ['name' => 'Eka Nur Ahmad Romadhoni, S.Pd', 'email' => 'ekanur@gmail.com'],
+            ['name' => 'Yunianto Hermawan, S.Kom', 'email' => 'yuniantohhermawan@gmail.com'],
+            ['name' => 'Ratna Yunitasari, S.T', 'email' => 'ratnayunitasari@gmail.com'],
         ];
 
         foreach ($users as $user) {

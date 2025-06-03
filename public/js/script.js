@@ -2,20 +2,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector(".form_container");
   const loginBtn = document.querySelector(".login_btn");
 
-  // Jika url adalah /register, langsung tampilkan form register
   if (window.location.pathname === '/register') {
     container.classList.add('active');
   }
 
   if (loginBtn) {
-    loginBtn.addEventListener('click', () => {
-      container.classList.remove('active');
+    loginBtn.addEventListener('click', (e) => {
+      // Cek apakah ada error dari Livewire (dengan class dari @error)
+      const hasErrors = document.querySelectorAll('.text-red-500').length > 0;
+
+      if (!hasErrors) {
+        container.classList.remove('active');
+      } else {
+        // Jangan lakukan toggle jika error
+        e.preventDefault();
+      }
     });
   }
 
   // Toggle password eye icon
   const togglePasswordBtns = document.querySelectorAll('.togglePasswordBtn');
-
   togglePasswordBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const targetInputId = btn.getAttribute('data-target');

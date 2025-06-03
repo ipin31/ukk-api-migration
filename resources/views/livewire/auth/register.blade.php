@@ -1,5 +1,5 @@
 <div class="wrapper">
-    <div class="form_container">
+    <div class="form_container {{ $showRegisterForm ? 'active' : '' }}">
 
         <!-- CSS -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
@@ -29,8 +29,7 @@
                     <input type="password" placeholder="Password" id="registerPassword" wire:model="password" required
                         style="padding-right: 40px;">
                     <i class="fas fa-lock"></i>
-                    <i class="fas fa-eye togglePasswordBtn" data-target="registerPassword"
-                        ></i>
+                    <i class="fas fa-eye togglePasswordBtn" data-target="registerPassword"></i>
                 </div>
                 @error('password')
                     <small class="text-red-500">{{ $message }}</small>
@@ -40,11 +39,14 @@
                     <input type="password" placeholder="Confirm Password" id="registerConfirmPassword"
                         wire:model="password_confirmation" required style="padding-right: 40px;">
                     <i class="fas fa-lock"></i>
-                    <i class="fas fa-eye togglePasswordBtn" data-target="registerConfirmPassword"
-                        ></i>
+                    <i class="fas fa-eye togglePasswordBtn" data-target="registerConfirmPassword"></i>
                 </div>
 
-                <button type="submit">Register</button>
+                <button type="submit" wire:loading.attr="disabled">
+                    Register
+                    <span wire:loading wire:target="register" class="ml-2 spinner-border spinner-border-sm"
+                        role="status"></span>
+                </button>
             </form>
         </div>
 
